@@ -1,11 +1,11 @@
-const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Per Anhalter durch die Galaxis - Hörbuch</title>
     <style>
-        /* Retro 70er Jahre Stil */
+        /* Retro 70er Jahre Stil mit Farben aus dem Cover */
         :root {
             --primary-color: #E95420; /* Orange aus dem Cover */
             --secondary-color: #F4D2A6; /* Hellbeige aus dem Cover */
@@ -180,6 +180,42 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
             margin-top: 0.5rem;
             font-weight: bold;
         }
+        
+        .time-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .text-btn {
+            background-color: var(--tertiary-color);
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 5px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 5px rgba(249, 167, 62, 0.2);
+        }
+        
+        .text-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .time-input {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 5px;
+            padding: 0.3rem;
+            width: 80px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
 
         .info-panel {
             background-color: rgba(20, 30, 60, 0.7);
@@ -294,6 +330,21 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
             .book-cover {
                 max-width: 250px;
             }
+            
+            .time-navigation {
+                justify-content: center;
+                gap: 0.3rem;
+            }
+            
+            .text-btn {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.8rem;
+            }
+            
+            .time-input {
+                width: 70px;
+                padding: 0.2rem;
+            }
         }
     </style>
 </head>
@@ -332,6 +383,14 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
                     <span id="currentTime">00:00:00</span>
                     <span id="duration">00:00:00</span>
                 </div>
+                <div class="time-navigation">
+                    <button id="startBtn" class="text-btn" title="Zum Anfang (0:00)">Anfang</button>
+                    <button id="ch1Btn" class="text-btn" title="Kapitel 1 (21:35)">Kapitel 1</button>
+                    <button id="ch2Btn" class="text-btn" title="Kapitel 2 (45:00)">Kapitel 2</button>
+                    <button id="ch3Btn" class="text-btn" title="Kapitel 3 (1:10:00)">Kapitel 3</button>
+                    <input type="text" id="customTimeInput" placeholder="HH:MM:SS" class="time-input">
+                    <button id="goToTimeBtn" class="text-btn" title="Zu bestimmter Zeit springen">Gehe zu</button>
+                </div>
             </div>
         </div>
 
@@ -351,14 +410,37 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
     <span class="decoration decoration-5">🪐</span>
 
     <script>
-        // Bei Seiten-Verlassen Position speichern
-        window.addEventListener('beforeunload', function() {
-            saveCurrentPosition();
-        });
-        
         document.addEventListener('DOMContentLoaded', function() {
-            // Audio-Element erstellen
-            const audio = new Audio();
+            // Standard-Lautstärke setzen, die wir später auf den YouTube-Player anwenden
+            let currentVolume = 0.7;
+            
+            // HTML-Elemente auswählen
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const rewindBtn = document.getElementById('rewindBtn');
+            const forwardBtn = document.getElementById('forwardBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const startBtn = document.getElementById('startBtn');
+            const ch1Btn = document.getElementById('ch1Btn');
+            const ch2Btn = document.getElementById('ch2Btn');
+            const ch3Btn = document.getElementById('ch3Btn');
+            const customTimeInput = document.getElementById('customTimeInput');
+            const goToTimeBtn = document.getElementById('goToTimeBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const progressFill = document.getElementById('progressFill');
+            const currentTimeDisplay = document.getElementById('currentTime');
+            const durationDisplay = document.getElementById('duration');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            // Kapitel-Informationen
+            const chapters = [
+                { start: 0, title: "Intro" },
+                { start: 1295, title: "Kapitel 1: Die Erde wird gesprengt" },
+                { start: 2700, title: "Kapitel 2: Das Herz aus Gold" },
+                { start: 4200, title: "Kapitel 3: Die unendlichen Weiten" },
+                { start: 5400, title: "Kapitel 4: Das Restaurant am Ende des Universums" },
+                { start: 7200, title: "Kapitel 5: Die Antwort ist 42" }
+            ];
             
             // YouTube API einbinden
             let player;
@@ -461,30 +543,6 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
                 }
             }
             
-            // Standard-Lautstärke setzen
-            audio.volume = 0.7;
-            
-            // HTML-Elemente auswählen
-            const playPauseBtn = document.getElementById('playPauseBtn');
-            const rewindBtn = document.getElementById('rewindBtn');
-            const forwardBtn = document.getElementById('forwardBtn');
-            const restartBtn = document.getElementById('restartBtn');
-            const volumeSlider = document.getElementById('volumeSlider');
-            const progressFill = document.getElementById('progressFill');
-            const currentTimeDisplay = document.getElementById('currentTime');
-            const durationDisplay = document.getElementById('duration');
-            const progressPercentage = document.getElementById('progressPercentage');
-            const statusMessage = document.getElementById('statusMessage');
-            
-            // Kapitel-Informationen
-            const chapters = [
-                { start: 0, title: "Kapitel 1: Die Erde wird gesprengt" },
-                { start: 1800, title: "Kapitel 2: Das Herz aus Gold" },
-                { start: 3600, title: "Kapitel 3: Die unendlichen Weiten" },
-                { start: 5400, title: "Kapitel 4: Das Restaurant am Ende des Universums" },
-                { start: 7200, title: "Kapitel 5: Die Antwort ist 42" }
-            ];
-            
             // Play/Pause-Button Funktionalität
             playPauseBtn.addEventListener('click', function() {
                 if (player && player.getPlayerState) {
@@ -522,6 +580,29 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
                 }
             });
             
+            // Restart-Button (Von vorne beginnen)
+            restartBtn.addEventListener('click', function() {
+                if (player && typeof player.seekTo === 'function') {
+                    try {
+                        player.seekTo(1295, true); // Zurück zur Startposition des Hörbuchs (21:35)
+                        showStatusMessage('Hörbuch von vorne gestartet');
+                        saveCurrentPosition();
+                        
+                        // Falls der Player gerade pausiert ist, starten wir ihn
+                        if (typeof player.getPlayerState === 'function' && 
+                            typeof YT !== 'undefined' && 
+                            player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                            player.playVideo();
+                        }
+                    } catch (error) {
+                        console.error('Fehler beim Zurücksetzen:', error);
+                        showStatusMessage('Fehler beim Zurücksetzen des Players');
+                    }
+                } else {
+                    showStatusMessage('YouTube-Player wird noch geladen...');
+                }
+            });
+            
             // Lautstärkeregler
             volumeSlider.addEventListener('input', function() {
                 if (player && player.setVolume) {
@@ -540,12 +621,96 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
                 }
             });
             
-            // Zeit formatieren (HH:MM:SS)
-            function formatTime(seconds) {
-                const h = Math.floor(seconds / 3600);
-                const m = Math.floor((seconds % 3600) / 60);
-                const s = Math.floor(seconds % 60);
-                return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            // Funktionen für die Zeitnavigation
+            
+            // Zum absoluten Anfang des Videos springen (0:00)
+            startBtn.addEventListener('click', function() {
+                if (player && typeof player.seekTo === 'function') {
+                    try {
+                        player.seekTo(0, true);
+                        showStatusMessage('Zum Anfang des Videos gesprungen');
+                        saveCurrentPosition();
+                    } catch (error) {
+                        console.error('Fehler beim Springen zum Anfang:', error);
+                        showStatusMessage('Fehler beim Springen');
+                    }
+                } else {
+                    showStatusMessage('YouTube-Player wird noch geladen...');
+                }
+            });
+            
+            // Zu Kapitel 1 springen (21:35)
+            ch1Btn.addEventListener('click', function() {
+                seekToTimestamp(chapters[1].start);
+                showStatusMessage('Zu Kapitel 1 gesprungen');
+            });
+            
+            // Zu Kapitel 2 springen
+            ch2Btn.addEventListener('click', function() {
+                seekToTimestamp(chapters[2].start);
+                showStatusMessage('Zu Kapitel 2 gesprungen');
+            });
+            
+            // Zu Kapitel 3 springen
+            ch3Btn.addEventListener('click', function() {
+                seekToTimestamp(chapters[3].start);
+                showStatusMessage('Zu Kapitel 3 gesprungen');
+            });
+            
+            // Zu benutzerdefinierter Zeit springen
+            goToTimeBtn.addEventListener('click', function() {
+                const timeString = customTimeInput.value.trim();
+                const seconds = parseTimeString(timeString);
+                
+                if (seconds !== null) {
+                    seekToTimestamp(seconds);
+                    showStatusMessage(`Zu ${timeString} gesprungen`);
+                } else {
+                    showStatusMessage('Ungültiges Zeitformat! Bitte HH:MM:SS oder MM:SS eingeben');
+                }
+            });
+            
+            // Zeit-String in Sekunden umwandeln
+            function parseTimeString(timeString) {
+                // HH:MM:SS Format
+                let match = timeString.match(/^(\d+):(\d+):(\d+)$/);
+                if (match) {
+                    const hours = parseInt(match[1], 10);
+                    const minutes = parseInt(match[2], 10);
+                    const seconds = parseInt(match[3], 10);
+                    return hours * 3600 + minutes * 60 + seconds;
+                }
+                
+                // MM:SS Format
+                match = timeString.match(/^(\d+):(\d+)$/);
+                if (match) {
+                    const minutes = parseInt(match[1], 10);
+                    const seconds = parseInt(match[2], 10);
+                    return minutes * 60 + seconds;
+                }
+                
+                // Nur Sekunden
+                match = timeString.match(/^(\d+)$/);
+                if (match) {
+                    return parseInt(match[1], 10);
+                }
+                
+                return null;
+            }
+            
+            // Zu einem bestimmten Zeitstempel springen
+            function seekToTimestamp(seconds) {
+                if (player && typeof player.seekTo === 'function') {
+                    try {
+                        player.seekTo(seconds, true);
+                        saveCurrentPosition();
+                    } catch (error) {
+                        console.error('Fehler beim Springen:', error);
+                        showStatusMessage('Fehler beim Springen');
+                    }
+                } else {
+                    showStatusMessage('YouTube-Player wird noch geladen...');
+                }
             }
             
             // Aktuelles Kapitel ermitteln und anzeigen
@@ -581,6 +746,14 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
                 }
             }
             
+            // Zeit formatieren (HH:MM:SS)
+            function formatTime(seconds) {
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = Math.floor(seconds % 60);
+                return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+            
             // Statusmeldung anzeigen und nach 3 Sekunden ausblenden
             function showStatusMessage(message) {
                 statusMessage.textContent = message;
@@ -601,33 +774,27 @@ const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
                 } else if (e.code === 'ArrowRight') { // Pfeil rechts für vor
                     e.preventDefault();
                     forwardBtn.click();
-                } else if (e.code === 'Home') { // Home-Taste für Neustart
+                } else if (e.code === 'Home') { // Home-Taste für zum Anfang
                     e.preventDefault();
-                    restartBtn.click();
+                    startBtn.click();
+                } else if (e.code === 'Digit1' && e.altKey) { // Alt+1 für Kapitel 1
+                    e.preventDefault();
+                    ch1Btn.click();
+                } else if (e.code === 'Digit2' && e.altKey) { // Alt+2 für Kapitel 2
+                    e.preventDefault();
+                    ch2Btn.click();
+                } else if (e.code === 'Digit3' && e.altKey) { // Alt+3 für Kapitel 3
+                    e.preventDefault();
+                    ch3Btn.click();
+                } else if (e.code === 'Enter' && document.activeElement === customTimeInput) {
+                    e.preventDefault();
+                    goToTimeBtn.click();
                 }
             });
-
-            // Restart-Button (Von vorne beginnen)
-            restartBtn.addEventListener('click', function() {
-                if (player && typeof player.seekTo === 'function') {
-                    try {
-                        player.seekTo(1295, true); // Zurück zur Startposition des Hörbuchs (21:35)
-                        showStatusMessage('Hörbuch von vorne gestartet');
-                        saveCurrentPosition();
-                        
-                        // Falls der Player gerade pausiert ist, starten wir ihn
-                        if (typeof player.getPlayerState === 'function' && 
-                            typeof YT !== 'undefined' && 
-                            player.getPlayerState() !== YT.PlayerState.PLAYING) {
-                            player.playVideo();
-                        }
-                    } catch (error) {
-                        console.error('Fehler beim Zurücksetzen:', error);
-                        showStatusMessage('Fehler beim Zurücksetzen des Players');
-                    }
-                } else {
-                    showStatusMessage('YouTube-Player wird noch geladen...');
-                }
+            
+            // Bei Seiten-Verlassen Position speichern
+            window.addEventListener('beforeunload', function() {
+                saveCurrentPosition();
             });
         });
     </script>
