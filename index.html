@@ -31,19 +31,6 @@
                 radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
             background-size: 40px 40px;
             background-position: 0 0, 20px 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(30, 50, 100, 0.2) 0%, rgba(10, 59, 60, 0.9) 100%);
-            z-index: -1;
         }
 
         .container {
@@ -71,30 +58,10 @@
             padding: 0.5rem;
             border-radius: 10px;
             text-transform: uppercase;
-            letter-spacing: 2px;
             margin-top: 0;
             margin-bottom: 1rem;
             box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.3);
             text-shadow: 1px 1px 0 #000;
-            font-weight: bold;
-        }
-
-        .retro-heading {
-            position: relative;
-            overflow: hidden;
-            padding: 0.5rem;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            border: 2px solid var(--secondary-color);
-        }
-
-        .retro-heading h2 {
-            color: var(--background-color);
-            text-align: center;
-            margin: 0;
-            font-size: 1.2rem;
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
             font-weight: bold;
         }
 
@@ -105,191 +72,6 @@
             border: 2px solid var(--secondary-color);
             margin-bottom: 1.5rem;
             box-shadow: 0 0 15px rgba(249, 167, 62, 0.3);
-        }
-
-        .player-control-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .controls {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
-            border: 2px solid var(--secondary-color);
-            border-radius: 50%;
-            width: 3rem;
-            height: 3rem;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 10px rgba(249, 167, 62, 0.3);
-            transition: all 0.2s ease;
-            margin: 0 0.25rem;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(249, 167, 62, 0.6);
-            background-color: var(--accent-color);
-        }
-
-        button:active {
-            transform: translateY(1px);
-            box-shadow: 0 0 5px rgba(249, 167, 62, 0.4);
-        }
-
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .progress-container {
-            margin-top: 1rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid var(--text-color);
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .time-display {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.5rem;
-            font-weight: bold;
-        }
-        
-        .time-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.75rem;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        
-        .text-btn {
-            background-color: var(--tertiary-color);
-            color: var(--secondary-color);
-            border: 1px solid var(--secondary-color);
-            border-radius: 5px;
-            padding: 0.3rem 0.6rem;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 0 5px rgba(249, 167, 62, 0.2);
-        }
-        
-        .text-btn:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-2px);
-        }
-        
-        .time-input {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            border: 1px solid var(--secondary-color);
-            border-radius: 5px;
-            padding: 0.3rem;
-            width: 80px;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-        }
-
-        .info-panel {
-            background-color: rgba(20, 30, 60, 0.7);
-            padding: 1rem;
-            border-radius: 10px;
-            border: 2px solid var(--tertiary-color);
-            margin-top: 1rem;
-            box-shadow: 0 0 10px rgba(46, 196, 182, 0.3);
-        }
-
-        .info-panel h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            border-bottom: 2px dashed var(--tertiary-color);
-            padding-bottom: 0.5rem;
-        }
-
-        .status-message {
-            margin-top: 1rem;
-            font-style: italic;
-            text-align: center;
-            height: 1.5rem;
-        }
-
-        .decoration {
-            position: absolute;
-            font-size: 2rem;
-            color: var(--tertiary-color);
-            opacity: 0.5;
-            user-select: none;
-        }
-
-        .decoration-1 {
-            top: 10%;
-            left: 5%;
-            transform: rotate(-15deg);
-        }
-
-        .decoration-2 {
-            bottom: 15%;
-            right: 8%;
-            transform: rotate(20deg);
-        }
-        
-        .decoration-3 {
-            top: 30%;
-            right: 15%;
-            font-size: 2.5rem;
-            transform: rotate(-10deg);
-        }
-        
-        .decoration-4 {
-            bottom: 40%;
-            left: 10%;
-            font-size: 1.8rem;
-            animation: twinkle 3s infinite alternate;
-        }
-        
-        .decoration-5 {
-            top: 60%;
-            right: 20%;
-            font-size: 2.2rem;
-            animation: float 8s infinite ease-in-out;
-        }
-        
-        @keyframes twinkle {
-            0% { opacity: 0.2; }
-            100% { opacity: 0.8; }
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(5deg); }
-            100% { transform: translateY(0) rotate(0deg); }
         }
 
         .book-cover {
@@ -310,6 +92,74 @@
             display: block;
         }
 
+        /* Player Styles */
+        #audioPlayer {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .control-button {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .control-button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #volumeSlider {
+            width: 100px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+
+        .info-panel {
+            background-color: rgba(20, 30, 60, 0.7);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid var(--tertiary-color);
+            margin-top: 1rem;
+            box-shadow: 0 0 10px rgba(46, 196, 182, 0.3);
+        }
+
+        .status-message {
+            margin-top: 1rem;
+            font-style: italic;
+            text-align: center;
+            height: 1.5rem;
+        }
+
+        /* Responsive */
         @media (max-width: 600px) {
             .container {
                 width: 95%;
@@ -320,30 +170,18 @@
                 font-size: 1.2rem;
                 padding: 0.5rem;
             }
-
-            button {
-                width: 2.5rem;
-                height: 2.5rem;
-                margin: 0 0.15rem;
+            
+            .control-button {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.9rem;
             }
             
             .book-cover {
                 max-width: 250px;
             }
             
-            .time-navigation {
-                justify-content: center;
-                gap: 0.3rem;
-            }
-            
-            .text-btn {
-                padding: 0.2rem 0.4rem;
-                font-size: 0.8rem;
-            }
-            
-            .time-input {
+            #volumeSlider {
                 width: 70px;
-                padding: 0.2rem;
             }
         }
     </style>
@@ -357,381 +195,272 @@
             </div>
         </header>
 
-        <div class="retro-heading">
-            <h2>Intergalaktischer Hörbuch-Player</h2>
-        </div>
-
         <div class="player-container">
-            <div class="player-control-row">
-                <div class="controls">
-                    <button id="playPauseBtn" title="Play/Pause">▶</button>
-                    <button id="rewindBtn" title="30 Sekunden zurück">↺</button>
-                    <button id="forwardBtn" title="30 Sekunden vor">↻</button>
-                    <button id="restartBtn" title="Von vorne beginnen">↩</button>
+            <!-- Eingebetteter YouTube-Player (versteckt) -->
+            <div id="youtubePlayerContainer" style="display: none;"></div>
+            
+            <!-- Einfaches Player Interface -->
+            <div class="controls">
+                <div class="control-buttons">
+                    <button class="control-button" id="playBtn">▶ Play</button>
+                    <button class="control-button" id="pauseBtn">⏸ Pause</button>
+                    <button class="control-button" id="rewindBtn">⏪ -30s</button>
+                    <button class="control-button" id="forwardBtn">⏩ +30s</button>
                 </div>
                 <div class="volume-control">
                     <span>🔊</span>
-                    <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.7">
+                    <input type="range" id="volumeSlider" min="0" max="100" step="5" value="70">
                 </div>
             </div>
-
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="time-display">
-                    <span id="currentTime">00:00:00</span>
-                    <span id="duration">00:00:00</span>
-                </div>
-                <div class="time-navigation">
-                    <button id="startBtn" class="text-btn" title="Zum Anfang (0:00)">Anfang</button>
-                    <button id="ch1Btn" class="text-btn" title="Kapitel 1 (21:35)">Kapitel 1</button>
-                    <button id="ch2Btn" class="text-btn" title="Kapitel 2 (45:00)">Kapitel 2</button>
-                    <button id="ch3Btn" class="text-btn" title="Kapitel 3 (1:10:00)">Kapitel 3</button>
-                    <input type="text" id="customTimeInput" placeholder="HH:MM:SS" class="time-input">
-                    <button id="goToTimeBtn" class="text-btn" title="Zu bestimmter Zeit springen">Gehe zu</button>
-                </div>
+            
+            <div class="controls">
+                <button class="control-button" id="startBtn">⏮ Anfang</button>
+                <button class="control-button" id="beginHoerbuchBtn">📕 Start Hörbuch (21:35)</button>
+                <span id="currentTime">00:00:00</span> / <span id="duration">00:00:00</span>
+            </div>
+            
+            <div id="progressContainer" style="width: 100%; height: 20px; background-color: #444; border-radius: 5px; overflow: hidden; margin-top: 10px;">
+                <div id="progressBar" style="width: 0%; height: 100%; background-color: var(--primary-color);"></div>
             </div>
         </div>
 
         <div class="info-panel">
-            <h3>Kapitel-Informationen</h3>
-            <p>Aktuelles Kapitel: <span id="currentChapter">Kapitel 1: Die Erde wird gesprengt</span></p>
-            <p>Fortschritt: <span id="progressPercentage">0%</span> des Hörbuchs abgeschlossen</p>
+            <p>Das Hörbuch startet bei Minute 21:35, wo die eigentliche Geschichte beginnt.</p>
+            <p>Die Position wird automatisch gespeichert und beim nächsten Besuch geladen.</p>
         </div>
 
         <div class="status-message" id="statusMessage"></div>
     </div>
 
-    <span class="decoration decoration-1">🚀</span>
-    <span class="decoration decoration-2">👽</span>
-    <span class="decoration decoration-3">🌌</span>
-    <span class="decoration decoration-5">🪐</span>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Standard-Lautstärke setzen, die wir später auf den YouTube-Player anwenden
-            let currentVolume = 0.7;
-            
-            // HTML-Elemente auswählen
-            const playPauseBtn = document.getElementById('playPauseBtn');
+            // Elemente auswählen
+            const playBtn = document.getElementById('playBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
             const rewindBtn = document.getElementById('rewindBtn');
             const forwardBtn = document.getElementById('forwardBtn');
-            const restartBtn = document.getElementById('restartBtn');
             const startBtn = document.getElementById('startBtn');
-            const ch1Btn = document.getElementById('ch1Btn');
-            const ch2Btn = document.getElementById('ch2Btn');
-            const ch3Btn = document.getElementById('ch3Btn');
-            const customTimeInput = document.getElementById('customTimeInput');
-            const goToTimeBtn = document.getElementById('goToTimeBtn');
+            const beginHoerbuchBtn = document.getElementById('beginHoerbuchBtn');
             const volumeSlider = document.getElementById('volumeSlider');
-            const progressFill = document.getElementById('progressFill');
             const currentTimeDisplay = document.getElementById('currentTime');
             const durationDisplay = document.getElementById('duration');
-            const progressPercentage = document.getElementById('progressPercentage');
+            const progressBar = document.getElementById('progressBar');
             const statusMessage = document.getElementById('statusMessage');
-            
-            // Kapitel-Informationen
-            const chapters = [
-                { start: 0, title: "Intro" },
-                { start: 1295, title: "Kapitel 1: Die Erde wird gesprengt" },
-                { start: 2700, title: "Kapitel 2: Das Herz aus Gold" },
-                { start: 4200, title: "Kapitel 3: Die unendlichen Weiten" },
-                { start: 5400, title: "Kapitel 4: Das Restaurant am Ende des Universums" },
-                { start: 7200, title: "Kapitel 5: Die Antwort ist 42" }
-            ];
             
             // YouTube API einbinden
             let player;
-            let tag = document.createElement('script');
+            let isPlayerReady = false;
+            
+            // Tag für YouTube API erstellen
+            const tag = document.createElement('script');
             tag.src = "https://www.youtube.com/iframe_api";
-            let firstScriptTag = document.getElementsByTagName('script')[0];
+            const firstScriptTag = document.getElementsByTagName('script')[0];
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
             
-            // YouTube-Player erstellen
-            const youtubeContainer = document.createElement('div');
-            youtubeContainer.id = 'youtube-player';
-            youtubeContainer.style.display = 'none'; // Verstecken, da wir nur unsere eigene UI nutzen
-            document.body.appendChild(youtubeContainer);
+            // YouTube Player Container erstellen
+            const youtubeContainer = document.getElementById('youtubePlayerContainer');
+            
+            // Video ID und Startzeit
+            const videoId = '0QZWYvf-cXM';
+            const hoerbuchStartzeit = 1295; // 21:35 in Sekunden
             
             // YouTube Player wird erstellt, wenn API geladen ist
             window.onYouTubeIframeAPIReady = function() {
-                player = new YT.Player('youtube-player', {
-                    height: '315',
-                    width: '560',
-                    videoId: '0QZWYvf-cXM',
+                player = new YT.Player('youtubePlayerContainer', {
+                    height: '0',
+                    width: '0',
+                    videoId: videoId,
                     playerVars: {
-                        'start': 1295,
-                        'playsinline': 1,
-                        'controls': 0,
-                        'rel': 0
+                        'autoplay': 0,
+                        'controls': 0
                     },
                     events: {
                         'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
+                        'onStateChange': onPlayerStateChange,
+                        'onError': onPlayerError
                     }
                 });
             };
             
+            // Player bereit
             function onPlayerReady(event) {
-                // Player ist bereit, jetzt können wir die Metadaten laden
-                updatePlayerDuration();
-                showStatusMessage('Hörbuch geladen');
+                isPlayerReady = true;
+                showStatusMessage('Player bereit');
                 
-                // Gespeicherte Position laden, wenn vorhanden
+                // Dauer anzeigen
+                updateDuration();
+                
+                // Gespeicherte Position laden
                 loadSavedPosition();
+                
+                // Lautstärke einstellen
+                player.setVolume(parseInt(volumeSlider.value));
+                
+                // Fortschritt regelmäßig aktualisieren
+                setInterval(updateProgress, 500);
             }
             
+            // Player Status ändern
             function onPlayerStateChange(event) {
-                // Status des YouTube-Players überwachen
                 if (event.data === YT.PlayerState.PLAYING) {
-                    playPauseBtn.textContent = '❚❚';
-                    startProgressTracker();
+                    showStatusMessage('Wiedergabe läuft');
                 } else if (event.data === YT.PlayerState.PAUSED) {
-                    playPauseBtn.textContent = '▶';
-                    stopProgressTracker();
+                    showStatusMessage('Wiedergabe pausiert');
                 } else if (event.data === YT.PlayerState.ENDED) {
-                    playPauseBtn.textContent = '▶';
-                    showStatusMessage('Hörbuch beendet');
-                    saveCurrentPosition();
-                    stopProgressTracker();
+                    showStatusMessage('Wiedergabe beendet');
                 }
             }
             
-            // Tracking-Intervall für den Fortschritt
-            let progressInterval;
-            
-            function startProgressTracker() {
-                stopProgressTracker(); // Sicherstellen, dass kein doppeltes Intervall läuft
-                progressInterval = setInterval(updatePlayerProgress, 500);
+            // Player Fehler
+            function onPlayerError(event) {
+                showStatusMessage('Fehler beim Laden des Videos');
+                console.error('YouTube Player Fehler:', event.data);
             }
             
-            function stopProgressTracker() {
-                if (progressInterval) {
-                    clearInterval(progressInterval);
-                }
-            }
+            // Event-Listener für Buttons
             
-            function updatePlayerDuration() {
-                if (player && player.getDuration) {
-                    const duration = player.getDuration();
-                    durationDisplay.textContent = formatTime(duration);
-                }
-            }
-            
-            function updatePlayerProgress() {
-                if (player && player.getCurrentTime && player.getDuration) {
-                    const currentTime = player.getCurrentTime();
-                    const duration = player.getDuration();
-                    
-                    // Fortschrittsleiste aktualisieren
-                    const percent = (currentTime / duration) * 100;
-                    progressFill.style.width = `${percent}%`;
-                    progressPercentage.textContent = `${Math.round(percent)}%`;
-                    
-                    // Zeitanzeige aktualisieren
-                    currentTimeDisplay.textContent = formatTime(currentTime);
-                    
-                    // Aktuelles Kapitel bestimmen
-                    updateCurrentChapter(currentTime);
-                    
-                    // Position speichern (alle 10 Sekunden)
-                    if (Math.floor(currentTime) % 10 === 0) {
-                        saveCurrentPosition();
-                    }
-                }
-            }
-            
-            // Play/Pause-Button Funktionalität
-            playPauseBtn.addEventListener('click', function() {
-                if (player && player.getPlayerState) {
-                    const state = player.getPlayerState();
-                    if (state === YT.PlayerState.PLAYING) {
-                        player.pauseVideo();
-                        showStatusMessage('Wiedergabe pausiert');
-                    } else {
-                        player.playVideo();
-                        showStatusMessage('Wiedergabe läuft');
-                    }
+            // Play Button
+            playBtn.addEventListener('click', function() {
+                if (isPlayerReady) {
+                    player.playVideo();
+                    showStatusMessage('Wiedergabe gestartet');
                 } else {
                     showStatusMessage('Player wird noch geladen...');
                 }
             });
             
-            // Zurückspulen um 30 Sekunden
+            // Pause Button
+            pauseBtn.addEventListener('click', function() {
+                if (isPlayerReady) {
+                    player.pauseVideo();
+                    showStatusMessage('Wiedergabe pausiert');
+                } else {
+                    showStatusMessage('Player wird noch geladen...');
+                }
+            });
+            
+            // Zurückspulen
             rewindBtn.addEventListener('click', function() {
-                if (player && player.getCurrentTime) {
+                if (isPlayerReady) {
                     const currentTime = player.getCurrentTime();
                     player.seekTo(Math.max(0, currentTime - 30), true);
                     showStatusMessage('30 Sekunden zurückgespult');
                     saveCurrentPosition();
+                } else {
+                    showStatusMessage('Player wird noch geladen...');
                 }
             });
             
-            // Vorspulen um 30 Sekunden
+            // Vorspulen
             forwardBtn.addEventListener('click', function() {
-                if (player && player.getCurrentTime && player.getDuration) {
+                if (isPlayerReady) {
                     const currentTime = player.getCurrentTime();
-                    const duration = player.getDuration();
-                    player.seekTo(Math.min(duration, currentTime + 30), true);
+                    player.seekTo(currentTime + 30, true);
                     showStatusMessage('30 Sekunden vorgespult');
                     saveCurrentPosition();
-                }
-            });
-            
-            // Restart-Button (Von vorne beginnen)
-            restartBtn.addEventListener('click', function() {
-                if (player && typeof player.seekTo === 'function') {
-                    try {
-                        player.seekTo(1295, true); // Zurück zur Startposition des Hörbuchs (21:35)
-                        showStatusMessage('Hörbuch von vorne gestartet');
-                        saveCurrentPosition();
-                        
-                        // Falls der Player gerade pausiert ist, starten wir ihn
-                        if (typeof player.getPlayerState === 'function' && 
-                            typeof YT !== 'undefined' && 
-                            player.getPlayerState() !== YT.PlayerState.PLAYING) {
-                            player.playVideo();
-                        }
-                    } catch (error) {
-                        console.error('Fehler beim Zurücksetzen:', error);
-                        showStatusMessage('Fehler beim Zurücksetzen des Players');
-                    }
                 } else {
-                    showStatusMessage('YouTube-Player wird noch geladen...');
+                    showStatusMessage('Player wird noch geladen...');
                 }
             });
             
-            // Lautstärkeregler
+            // Zum Anfang springen
+            startBtn.addEventListener('click', function() {
+                if (isPlayerReady) {
+                    player.seekTo(0, true);
+                    showStatusMessage('Zum Anfang gesprungen');
+                    saveCurrentPosition();
+                } else {
+                    showStatusMessage('Player wird noch geladen...');
+                }
+            });
+            
+            // Zum Hörbuch-Start springen (21:35)
+            beginHoerbuchBtn.addEventListener('click', function() {
+                if (isPlayerReady) {
+                    player.seekTo(hoerbuchStartzeit, true);
+                    showStatusMessage('Zum Hörbuch-Start gesprungen (21:35)');
+                    saveCurrentPosition();
+                } else {
+                    showStatusMessage('Player wird noch geladen...');
+                }
+            });
+            
+            // Lautstärke ändern
             volumeSlider.addEventListener('input', function() {
-                if (player && player.setVolume) {
-                    player.setVolume(this.value * 100);
-                    showStatusMessage(`Lautstärke: ${Math.round(this.value * 100)}%`);
+                if (isPlayerReady) {
+                    player.setVolume(parseInt(this.value));
+                    showStatusMessage(`Lautstärke: ${this.value}%`);
                 }
             });
             
-            // Fortschrittsleiste klickbar machen
-            document.querySelector('.progress-bar').addEventListener('click', function(e) {
-                if (player && player.getDuration && player.seekTo) {
-                    const percent = e.offsetX / this.offsetWidth;
-                    const duration = player.getDuration();
-                    player.seekTo(percent * duration, true);
+            // Fortschrittsbalken klickbar machen
+            document.getElementById('progressContainer').addEventListener('click', function(e) {
+                if (isPlayerReady) {
+                    const container = this.getBoundingClientRect();
+                    const clickPosition = e.clientX - container.left;
+                    const percentage = clickPosition / container.width;
+                    
+                    const videoDuration = player.getDuration();
+                    const newTime = percentage * videoDuration;
+                    
+                    player.seekTo(newTime, true);
                     saveCurrentPosition();
                 }
             });
             
-            // Funktionen für die Zeitnavigation
-            
-            // Zum absoluten Anfang des Videos springen (0:00)
-            startBtn.addEventListener('click', function() {
-                if (player && typeof player.seekTo === 'function') {
+            // Fortschritt und Zeit aktualisieren
+            function updateProgress() {
+                if (isPlayerReady && player.getCurrentTime && player.getDuration) {
                     try {
-                        player.seekTo(0, true);
-                        showStatusMessage('Zum Anfang des Videos gesprungen');
-                        saveCurrentPosition();
+                        const currentTime = player.getCurrentTime();
+                        const duration = player.getDuration();
+                        
+                        // Fortschrittsbalken aktualisieren
+                        const percentage = (currentTime / duration) * 100;
+                        progressBar.style.width = `${percentage}%`;
+                        
+                        // Zeit aktualisieren
+                        currentTimeDisplay.textContent = formatTime(currentTime);
+                        
+                        // Position alle 10 Sekunden speichern
+                        if (Math.floor(currentTime) % 10 === 0) {
+                            saveCurrentPosition();
+                        }
                     } catch (error) {
-                        console.error('Fehler beim Springen zum Anfang:', error);
-                        showStatusMessage('Fehler beim Springen');
+                        console.error('Fehler beim Aktualisieren des Fortschritts:', error);
                     }
-                } else {
-                    showStatusMessage('YouTube-Player wird noch geladen...');
                 }
-            });
-            
-            // Zu Kapitel 1 springen (21:35)
-            ch1Btn.addEventListener('click', function() {
-                seekToTimestamp(chapters[1].start);
-                showStatusMessage('Zu Kapitel 1 gesprungen');
-            });
-            
-            // Zu Kapitel 2 springen
-            ch2Btn.addEventListener('click', function() {
-                seekToTimestamp(chapters[2].start);
-                showStatusMessage('Zu Kapitel 2 gesprungen');
-            });
-            
-            // Zu Kapitel 3 springen
-            ch3Btn.addEventListener('click', function() {
-                seekToTimestamp(chapters[3].start);
-                showStatusMessage('Zu Kapitel 3 gesprungen');
-            });
-            
-            // Zu benutzerdefinierter Zeit springen
-            goToTimeBtn.addEventListener('click', function() {
-                const timeString = customTimeInput.value.trim();
-                const seconds = parseTimeString(timeString);
-                
-                if (seconds !== null) {
-                    seekToTimestamp(seconds);
-                    showStatusMessage(`Zu ${timeString} gesprungen`);
-                } else {
-                    showStatusMessage('Ungültiges Zeitformat! Bitte HH:MM:SS oder MM:SS eingeben');
-                }
-            });
-            
-            // Zeit-String in Sekunden umwandeln
-            function parseTimeString(timeString) {
-                // HH:MM:SS Format
-                let match = timeString.match(/^(\d+):(\d+):(\d+)$/);
-                if (match) {
-                    const hours = parseInt(match[1], 10);
-                    const minutes = parseInt(match[2], 10);
-                    const seconds = parseInt(match[3], 10);
-                    return hours * 3600 + minutes * 60 + seconds;
-                }
-                
-                // MM:SS Format
-                match = timeString.match(/^(\d+):(\d+)$/);
-                if (match) {
-                    const minutes = parseInt(match[1], 10);
-                    const seconds = parseInt(match[2], 10);
-                    return minutes * 60 + seconds;
-                }
-                
-                // Nur Sekunden
-                match = timeString.match(/^(\d+)$/);
-                if (match) {
-                    return parseInt(match[1], 10);
-                }
-                
-                return null;
             }
             
-            // Zu einem bestimmten Zeitstempel springen
-            function seekToTimestamp(seconds) {
-                if (player && typeof player.seekTo === 'function') {
+            // Videodauer anzeigen
+            function updateDuration() {
+                if (isPlayerReady && player.getDuration) {
                     try {
-                        player.seekTo(seconds, true);
-                        saveCurrentPosition();
+                        const duration = player.getDuration();
+                        durationDisplay.textContent = formatTime(duration);
                     } catch (error) {
-                        console.error('Fehler beim Springen:', error);
-                        showStatusMessage('Fehler beim Springen');
+                        console.error('Fehler beim Abrufen der Dauer:', error);
                     }
-                } else {
-                    showStatusMessage('YouTube-Player wird noch geladen...');
                 }
             }
             
-            // Aktuelles Kapitel ermitteln und anzeigen
-            function updateCurrentChapter(currentTime) {
-                let currentChapterTitle = chapters[0].title;
-                
-                for (let i = chapters.length - 1; i >= 0; i--) {
-                    if (currentTime >= chapters[i].start) {
-                        currentChapterTitle = chapters[i].title;
-                        break;
-                    }
-                }
-                
-                document.getElementById('currentChapter').textContent = currentChapterTitle;
+            // Zeit formatieren (HH:MM:SS)
+            function formatTime(seconds) {
+                seconds = Math.floor(seconds);
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = Math.floor(seconds % 60);
+                return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
             }
             
-            // Position im Local Storage speichern
+            // Position speichern
             function saveCurrentPosition() {
-                if (player && player.getCurrentTime) {
-                    const currentTime = player.getCurrentTime();
-                    if (currentTime > 0) {
+                if (isPlayerReady && player.getCurrentTime) {
+                    try {
+                        const currentTime = player.getCurrentTime();
                         localStorage.setItem('hitchhiker-position', currentTime);
+                    } catch (error) {
+                        console.error('Fehler beim Speichern der Position:', error);
                     }
                 }
             }
@@ -739,21 +468,17 @@
             // Gespeicherte Position laden
             function loadSavedPosition() {
                 const savedPosition = localStorage.getItem('hitchhiker-position');
-                if (savedPosition !== null && player && player.seekTo) {
-                    player.seekTo(parseFloat(savedPosition), true);
-                    showStatusMessage('Letzte Position geladen');
+                if (savedPosition !== null && isPlayerReady && player.seekTo) {
+                    try {
+                        player.seekTo(parseFloat(savedPosition), true);
+                        showStatusMessage('Letzte Position geladen');
+                    } catch (error) {
+                        console.error('Fehler beim Laden der Position:', error);
+                    }
                 }
             }
             
-            // Zeit formatieren (HH:MM:SS)
-            function formatTime(seconds) {
-                const h = Math.floor(seconds / 3600);
-                const m = Math.floor((seconds % 3600) / 60);
-                const s = Math.floor(seconds % 60);
-                return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-            }
-            
-            // Statusmeldung anzeigen und nach 3 Sekunden ausblenden
+            // Statusmeldung anzeigen
             function showStatusMessage(message) {
                 statusMessage.textContent = message;
                 clearTimeout(statusMessage.timeout);
@@ -762,36 +487,28 @@
                 }, 3000);
             }
             
-            // Tastatur-Steuerung hinzufügen
+            // Tastatur-Steuerung
             document.addEventListener('keydown', function(e) {
                 if (e.code === 'Space') { // Leertaste für Play/Pause
-                    e.preventDefault(); // Verhindern, dass die Seite scrollt
-                    playPauseBtn.click();
+                    e.preventDefault();
+                    if (player.getPlayerState() === YT.PlayerState.PLAYING) {
+                        pauseBtn.click();
+                    } else {
+                        playBtn.click();
+                    }
                 } else if (e.code === 'ArrowLeft') { // Pfeil links für zurück
                     e.preventDefault();
                     rewindBtn.click();
                 } else if (e.code === 'ArrowRight') { // Pfeil rechts für vor
                     e.preventDefault();
                     forwardBtn.click();
-                } else if (e.code === 'Home') { // Home-Taste für zum Anfang
+                } else if (e.code === 'Home') { // Home-Taste für Anfang
                     e.preventDefault();
                     startBtn.click();
-                } else if (e.code === 'Digit1' && e.altKey) { // Alt+1 für Kapitel 1
-                    e.preventDefault();
-                    ch1Btn.click();
-                } else if (e.code === 'Digit2' && e.altKey) { // Alt+2 für Kapitel 2
-                    e.preventDefault();
-                    ch2Btn.click();
-                } else if (e.code === 'Digit3' && e.altKey) { // Alt+3 für Kapitel 3
-                    e.preventDefault();
-                    ch3Btn.click();
-                } else if (e.code === 'Enter' && document.activeElement === customTimeInput) {
-                    e.preventDefault();
-                    goToTimeBtn.click();
                 }
             });
             
-            // Bei Seiten-Verlassen Position speichern
+            // Position vor dem Verlassen der Seite speichern
             window.addEventListener('beforeunload', function() {
                 saveCurrentPosition();
             });
