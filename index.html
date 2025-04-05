@@ -1,7 +1,4 @@
-// Bei Seiten-Verlassen Position speichern
-            window.addEventListener('beforeunload', function() {
-                saveCurrentPosition();
-            });<!DOCTYPE html>
+const restartBtn = document.getElementById('restartBtn');<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -305,7 +302,7 @@
         <header>
             <h1>Per Anhalter durch die Galaxis</h1>
             <div class="book-cover">
-                <img src="https://i.ibb.co/XLDJ8rW/hitchhikers-guide.jpg" alt="The Hitchhiker's Guide to the Galaxy" width="300" height="400">
+                <img src="https://raw.githubusercontent.com/Thimeus/per-Anhalter-duch-die-Galaxis/main/Titelbild_gpt.png" alt="Per Anhalter durch die Galaxis" width="300" height="400" onerror="this.src='/api/placeholder/300/400';this.onerror=null;">
             </div>
         </header>
 
@@ -354,6 +351,11 @@
     <span class="decoration decoration-5">🪐</span>
 
     <script>
+        // Bei Seiten-Verlassen Position speichern
+        window.addEventListener('beforeunload', function() {
+            saveCurrentPosition();
+        });
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Audio-Element erstellen
             const audio = new Audio();
@@ -466,6 +468,7 @@
             const playPauseBtn = document.getElementById('playPauseBtn');
             const rewindBtn = document.getElementById('rewindBtn');
             const forwardBtn = document.getElementById('forwardBtn');
+            const restartBtn = document.getElementById('restartBtn');
             const volumeSlider = document.getElementById('volumeSlider');
             const progressFill = document.getElementById('progressFill');
             const currentTimeDisplay = document.getElementById('currentTime');
@@ -606,15 +609,24 @@
 
             // Restart-Button (Von vorne beginnen)
             restartBtn.addEventListener('click', function() {
-                if (player && player.seekTo) {
-                    player.seekTo(1295, true); // Zurück zur Startposition des Hörbuchs (21:35)
-                    showStatusMessage('Hörbuch von vorne gestartet');
-                    saveCurrentPosition();
-                    
-                    // Falls der Player gerade pausiert ist, starten wir ihn
-                    if (player.getPlayerState() !== YT.PlayerState.PLAYING) {
-                        player.playVideo();
+                if (player && typeof player.seekTo === 'function') {
+                    try {
+                        player.seekTo(1295, true); // Zurück zur Startposition des Hörbuchs (21:35)
+                        showStatusMessage('Hörbuch von vorne gestartet');
+                        saveCurrentPosition();
+                        
+                        // Falls der Player gerade pausiert ist, starten wir ihn
+                        if (typeof player.getPlayerState === 'function' && 
+                            typeof YT !== 'undefined' && 
+                            player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                            player.playVideo();
+                        }
+                    } catch (error) {
+                        console.error('Fehler beim Zurücksetzen:', error);
+                        showStatusMessage('Fehler beim Zurücksetzen des Players');
                     }
+                } else {
+                    showStatusMessage('YouTube-Player wird noch geladen...');
                 }
             });
         });
