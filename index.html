@@ -333,19 +333,106 @@
             // Audio-Element erstellen
             const audio = new Audio();
             
-            // YouTube als Quelle für das Hörbuch verwenden
-            audio.src = "https://www.youtube.com/watch?v=0QZWYvf-cXM&t=1295s";
+            // YouTube API einbinden
+            let player;
+            let tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            let firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
             
-            // YouTube-Einbindung über iframe
+            // YouTube-Player erstellen
             const youtubeContainer = document.createElement('div');
-            youtubeContainer.style.display = 'none'; // Verstecken, da wir nur den Ton brauchen
-            youtubeContainer.innerHTML = `
-                <iframe id="youtubeFrame" width="560" height="315" 
-                src="https://www.youtube.com/embed/0QZWYvf-cXM?start=1295&autoplay=0&enablejsapi=1" 
-                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen></iframe>
-            `;
+            youtubeContainer.id = 'youtube-player';
+            youtubeContainer.style.display = 'none'; // Verstecken, da wir nur unsere eigene UI nutzen
             document.body.appendChild(youtubeContainer);
+            
+            // YouTube Player wird erstellt, wenn API geladen ist
+            window.onYouTubeIframeAPIReady = function() {
+                player = new YT.Player('youtube-player', {
+                    height: '315',
+                    width: '560',
+                    videoId: '0QZWYvf-cXM',
+                    playerVars: {
+                        'start': 1295,
+                        'playsinline': 1,
+                        'controls': 0,
+                        'rel': 0
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            };
+            
+            function onPlayerReady(event) {
+                // Player ist bereit, jetzt können wir die Metadaten laden
+                updatePlayerDuration();
+                showStatusMessage('Hörbuch geladen');
+                
+                // Gespeicherte Position laden, wenn vorhanden
+                loadSavedPosition();
+            }
+            
+            function onPlayerStateChange(event) {
+                // Status des YouTube-Players überwachen
+                if (event.data === YT.PlayerState.PLAYING) {
+                    playPauseBtn.textContent = '❚❚';
+                    startProgressTracker();
+                } else if (event.data === YT.PlayerState.PAUSED) {
+                    playPauseBtn.textContent = '▶';
+                    stopProgressTracker();
+                } else if (event.data === YT.PlayerState.ENDED) {
+                    playPauseBtn.textContent = '▶';
+                    showStatusMessage('Hörbuch beendet');
+                    saveCurrentPosition();
+                    stopProgressTracker();
+                }
+            }
+            
+            // Tracking-Intervall für den Fortschritt
+            let progressInterval;
+            
+            function startProgressTracker() {
+                stopProgressTracker(); // Sicherstellen, dass kein doppeltes Intervall läuft
+                progressInterval = setInterval(updatePlayerProgress, 500);
+            }
+            
+            function stopProgressTracker() {
+                if (progressInterval) {
+                    clearInterval(progressInterval);
+                }
+            }
+            
+            function updatePlayerDuration() {
+                if (player && player.getDuration) {
+                    const duration = player.getDuration();
+                    durationDisplay.textContent = formatTime(duration);
+                }
+            }
+            
+            function updatePlayerProgress() {
+                if (player && player.getCurrentTime && player.getDuration) {
+                    const currentTime = player.getCurrentTime();
+                    const duration = player.getDuration();
+                    
+                    // Fortschrittsleiste aktualisieren
+                    const percent = (currentTime / duration) * 100;
+                    progressFill.style.width = `${percent}%`;
+                    progressPercentage.textContent = `${Math.round(percent)}%`;
+                    
+                    // Zeitanzeige aktualisieren
+                    currentTimeDisplay.textContent = formatTime(currentTime);
+                    
+                    // Aktuelles Kapitel bestimmen
+                    updateCurrentChapter(currentTime);
+                    
+                    // Position speichern (alle 10 Sekunden)
+                    if (Math.floor(currentTime) % 10 === 0) {
+                        saveCurrentPosition();
+                    }
+                }
+            }
             
             // Standard-Lautstärke setzen
             audio.volume = 0.7;
@@ -372,76 +459,57 @@
             
             // Play/Pause-Button Funktionalität
             playPauseBtn.addEventListener('click', function() {
-                if (audio.paused) {
-                    audio.play().then(() => {
-                        playPauseBtn.textContent = '❚❚';
+                if (player && player.getPlayerState) {
+                    const state = player.getPlayerState();
+                    if (state === YT.PlayerState.PLAYING) {
+                        player.pauseVideo();
+                        showStatusMessage('Wiedergabe pausiert');
+                    } else {
+                        player.playVideo();
                         showStatusMessage('Wiedergabe läuft');
-                    }).catch(error => {
-                        showStatusMessage('Fehler beim Laden des Hörbuchs: ' + error.message);
-                    });
+                    }
                 } else {
-                    audio.pause();
-                    playPauseBtn.textContent = '▶';
-                    showStatusMessage('Wiedergabe pausiert');
+                    showStatusMessage('Player wird noch geladen...');
                 }
             });
             
             // Zurückspulen um 30 Sekunden
             rewindBtn.addEventListener('click', function() {
-                audio.currentTime = Math.max(0, audio.currentTime - 30);
-                showStatusMessage('30 Sekunden zurückgespult');
-                saveCurrentPosition();
-            });
-            
-            // Vorspulen um 30 Sekunden
-            forwardBtn.addEventListener('click', function() {
-                audio.currentTime = Math.min(audio.duration, audio.currentTime + 30);
-                showStatusMessage('30 Sekunden vorgespult');
-                saveCurrentPosition();
-            });
-            
-            // Lautstärkeregler
-            volumeSlider.addEventListener('input', function() {
-                audio.volume = this.value;
-                showStatusMessage(`Lautstärke: ${Math.round(this.value * 100)}%`);
-            });
-            
-            // Fortschrittsleiste klickbar machen
-            document.querySelector('.progress-bar').addEventListener('click', function(e) {
-                const percent = e.offsetX / this.offsetWidth;
-                audio.currentTime = percent * audio.duration;
-                saveCurrentPosition();
-            });
-            
-            // Aktualisierung der Fortschrittsanzeige
-            audio.addEventListener('timeupdate', function() {
-                // Fortschrittsleiste aktualisieren
-                const percent = (audio.currentTime / audio.duration) * 100;
-                progressFill.style.width = `${percent}%`;
-                progressPercentage.textContent = `${Math.round(percent)}%`;
-                
-                // Zeitanzeige aktualisieren
-                currentTimeDisplay.textContent = formatTime(audio.currentTime);
-                
-                // Aktuelles Kapitel bestimmen
-                updateCurrentChapter();
-                
-                // Position speichern
-                if (audio.currentTime % 10 < 0.5) { // Alle 10 Sekunden
+                if (player && player.getCurrentTime) {
+                    const currentTime = player.getCurrentTime();
+                    player.seekTo(Math.max(0, currentTime - 30), true);
+                    showStatusMessage('30 Sekunden zurückgespult');
                     saveCurrentPosition();
                 }
             });
             
-            // Sobald die Metadaten geladen sind, die Gesamtdauer anzeigen
-            audio.addEventListener('loadedmetadata', function() {
-                durationDisplay.textContent = formatTime(audio.duration);
-                loadSavedPosition();
-                showStatusMessage('Hörbuch geladen');
+            // Vorspulen um 30 Sekunden
+            forwardBtn.addEventListener('click', function() {
+                if (player && player.getCurrentTime && player.getDuration) {
+                    const currentTime = player.getCurrentTime();
+                    const duration = player.getDuration();
+                    player.seekTo(Math.min(duration, currentTime + 30), true);
+                    showStatusMessage('30 Sekunden vorgespult');
+                    saveCurrentPosition();
+                }
             });
             
-            // Bei Fehler eine Meldung anzeigen
-            audio.addEventListener('error', function() {
-                showStatusMessage('Fehler beim Laden des Hörbuchs');
+            // Lautstärkeregler
+            volumeSlider.addEventListener('input', function() {
+                if (player && player.setVolume) {
+                    player.setVolume(this.value * 100);
+                    showStatusMessage(`Lautstärke: ${Math.round(this.value * 100)}%`);
+                }
+            });
+            
+            // Fortschrittsleiste klickbar machen
+            document.querySelector('.progress-bar').addEventListener('click', function(e) {
+                if (player && player.getDuration && player.seekTo) {
+                    const percent = e.offsetX / this.offsetWidth;
+                    const duration = player.getDuration();
+                    player.seekTo(percent * duration, true);
+                    saveCurrentPosition();
+                }
             });
             
             // Zeit formatieren (HH:MM:SS)
@@ -453,8 +521,7 @@
             }
             
             // Aktuelles Kapitel ermitteln und anzeigen
-            function updateCurrentChapter() {
-                const currentTime = audio.currentTime;
+            function updateCurrentChapter(currentTime) {
                 let currentChapterTitle = chapters[0].title;
                 
                 for (let i = chapters.length - 1; i >= 0; i--) {
@@ -469,16 +536,19 @@
             
             // Position im Local Storage speichern
             function saveCurrentPosition() {
-                if (audio.currentTime > 0) {
-                    localStorage.setItem('hitchhiker-position', audio.currentTime);
+                if (player && player.getCurrentTime) {
+                    const currentTime = player.getCurrentTime();
+                    if (currentTime > 0) {
+                        localStorage.setItem('hitchhiker-position', currentTime);
+                    }
                 }
             }
             
             // Gespeicherte Position laden
             function loadSavedPosition() {
                 const savedPosition = localStorage.getItem('hitchhiker-position');
-                if (savedPosition !== null) {
-                    audio.currentTime = parseFloat(savedPosition);
+                if (savedPosition !== null && player && player.seekTo) {
+                    player.seekTo(parseFloat(savedPosition), true);
                     showStatusMessage('Letzte Position geladen');
                 }
             }
@@ -492,16 +562,23 @@
                 }, 3000);
             }
             
-            // Event-Listener für das Ende des Hörbuchs
-            audio.addEventListener('ended', function() {
-                playPauseBtn.textContent = '▶';
-                showStatusMessage('Hörbuch beendet');
-                saveCurrentPosition();
-            });
-            
             // Bei Seiten-Verlassen Position speichern
             window.addEventListener('beforeunload', function() {
                 saveCurrentPosition();
+            });
+
+            // Tastatur-Steuerung hinzufügen
+            document.addEventListener('keydown', function(e) {
+                if (e.code === 'Space') { // Leertaste für Play/Pause
+                    e.preventDefault(); // Verhindern, dass die Seite scrollt
+                    playPauseBtn.click();
+                } else if (e.code === 'ArrowLeft') { // Pfeil links für zurück
+                    e.preventDefault();
+                    rewindBtn.click();
+                } else if (e.code === 'ArrowRight') { // Pfeil rechts für vor
+                    e.preventDefault();
+                    forwardBtn.click();
+                }
             });
         });
     </script>
